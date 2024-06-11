@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import PatientsGrid from '../components/PatientsGrid';
 import AddPatientModal from '../components/AddPatientModal';
 import styled from 'styled-components';
-
+import AddIcon from '@mui/icons-material/Add';
 const StyledContainer = styled(Container)`
   display: flex;
   flex-direction: column;
@@ -16,16 +16,16 @@ const StyledContainer = styled(Container)`
   margin-right: ${({ sidebarOpen }) => (sidebarOpen ? '240px' : '0')};
 `;
 
-const Content = styled(Box)`
-  flex-grow: 1;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 60px;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
-  background-color: #f4f4f4;
-  transition: margin-right 0.3s ease; // انیمیشن برای تغییر موقعیت
-  margin-right: ${({ sidebarOpen }) => (sidebarOpen ? '240px' : '0')};
-`;
+// const Content = styled(Box)`
+//   flex-grow: 1;
+//   padding: 20px;
+//   border-radius: 10px;
+//   margin-top: 60px;
+//   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+//   background-color: #f4f4f4;
+//   transition: margin-right 0.3s ease; // انیمیشن برای تغییر موقعیت
+//   margin-right: ${({ sidebarOpen }) => (sidebarOpen ? '240px' : '0')};
+// `;
 
 function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -48,15 +48,15 @@ function Dashboard() {
 
   return (
     <>
-      <TopBar onMenuClick={toggleSidebar} />
-      <StyledContainer maxWidth="false" sidebarOpen={isSidebarOpen}>
-        <Sidebar open={isSidebarOpen} onClose={toggleSidebar} />
-        <Content sidebarOpen={isSidebarOpen}>
-          <Button sx={{marginBottom:'30px'}} variant='contained' onClick={() => setIsModalOpen(true)}>افزودن بیمار جدید</Button>
+      {/* <TopBar onMenuClick={toggleSidebar} /> */}
+      {/* <StyledContainer maxWidth="false" sidebarOpen={isSidebarOpen}> */}
+        {/* <Sidebar open={isSidebarOpen} onClose={toggleSidebar} /> */}
+        {/* <Content sidebarOpen={isSidebarOpen}> */}
+          <Button sx={{marginBottom:'30px'}} variant='contained' onClick={() => setIsModalOpen(true)} ><AddIcon/> افزودن بیمار جدید </Button>
           <PatientsGrid patients={patients} />
-          <Footer />
-        </Content>
-      </StyledContainer>
+          {/* <Footer /> */}
+        {/* </Content> */}
+      {/* </StyledContainer> */}
       <AddPatientModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddPatient={addPatient} />
     </>
   );
