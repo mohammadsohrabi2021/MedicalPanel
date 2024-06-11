@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import { Drawer } from '@mui/material';
-import styled from 'styled-components';
-
+import React, { useState, useEffect } from "react";
+import { Drawer, Grid, useMediaQuery } from "@mui/material";
+import styled from "styled-components";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import ReportIcon from "@mui/icons-material/Report";
+import { useNavigate } from "react-router-dom";
+import logo from '../assets/images/images.png'
 const StyledDrawer = styled(Drawer)`
   & .MuiDrawer-paper {
     width: 240px;
@@ -18,14 +22,18 @@ const StyledList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  font-family: 'iran-sans', sans-serif;
+  font-family: "iran-sans", sans-serif;
 `;
 
 const StyledListItem = styled.li`
-  padding: 10px 20px;
+  padding: 20px 40px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
   transition: background-color 0.3s ease;
-  background-color: ${({ selected }) => (selected ? '#e0f7fa' : 'transparent')};
+  background-color: ${({ selected }) => (selected ? "#e0f7fa" : "transparent")};
   &:hover {
     background-color: #b2ebf2;
   }
@@ -35,15 +43,22 @@ const StyledListItem = styled.li`
 `;
 
 function Sidebar({ open, onClose }) {
-  const [selectedItem, setSelectedItem] = useState('');
+  const [selectedItem, setSelectedItem] = useState("dashboard");
+  const navigate = useNavigate();
 
-  const handleItemClick = (item) => {
+  const handleItemClick = (item, path) => {
     setSelectedItem(item);
+    navigate(path);
   };
 
+  useEffect(() => {
+    // Set the default selected item to 'dashboard'
+    handleItemClick("dashboard", "/dashboard");
+  }, []);
+  const matches = useMediaQuery("(min-width:600px)");
   return (
     <StyledDrawer
-      variant={open ? 'persistent' : 'temporary'}
+      variant={open ? "persistent" : "temporary"}
       anchor="right"
       open={open}
       onClose={onClose}
@@ -51,29 +66,70 @@ function Sidebar({ open, onClose }) {
         keepMounted: true, // بهتر کردن عملکرد در موبایل
       }}
     >
-      <StyledList>
-        <StyledListItem
-          selected={selectedItem === 'dashboard'}
-          onClick={() => handleItemClick('dashboard')}
-        >
-          داشبورد
-        </StyledListItem>
-        <StyledListItem
-          selected={selectedItem === 'patients'}
-          onClick={() => handleItemClick('patients')}
-        >
-          لیست بیماران
-        </StyledListItem>
-        <StyledListItem
-          selected={selectedItem === 'reports'}
-          onClick={() => handleItemClick('reports')}
-        >
-          گزارش‌ها
-        </StyledListItem>
-      </StyledList>
+      <Grid pt={2} textAlign={'center'}>
+      <img src={logo} style={{width:'50%'}} alt="logo" />
+      </Grid>
+     
+      {matches ? (
+        <StyledList>
+          <StyledListItem
+            selected={selectedItem === "dashboard"}
+            onClick={() => {
+              handleItemClick("dashboard", "/dashboard");
+            }}
+          >
+            <DashboardIcon /> داشبورد
+          </StyledListItem>
+          <StyledListItem
+            selected={selectedItem === "patients"}
+            onClick={() => {
+              handleItemClick("patients", "/dashboard/patients");
+            }}
+          >
+            <RecentActorsIcon /> لیست بیماران
+          </StyledListItem>
+          <StyledListItem
+            selected={selectedItem === "reports"}
+            onClick={() => {
+              handleItemClick("reports", "/dashboard/reports");
+            }}
+          >
+            <ReportIcon /> گزارش‌ها
+          </StyledListItem>
+        </StyledList>
+      ) : (
+        <StyledList>
+          <StyledListItem
+            selected={selectedItem === "dashboard"}
+            onClick={() => {
+              handleItemClick("dashboard", "/dashboard");
+              onClose(); // بستن سایدبار
+            }}
+          >
+            <DashboardIcon /> داشبورد
+          </StyledListItem>
+          <StyledListItem
+            selected={selectedItem === "patients"}
+            onClick={() => {
+              handleItemClick("patients", "/dashboard/patients");
+              onClose(); // بستن سایدبار
+            }}
+          >
+            <RecentActorsIcon /> لیست بیماران
+          </StyledListItem>
+          <StyledListItem
+            selected={selectedItem === "reports"}
+            onClick={() => {
+              handleItemClick("reports", "/dashboard/reports");
+              onClose(); // بستن سایدبار
+            }}
+          >
+            <ReportIcon /> گزارش‌ها
+          </StyledListItem>
+        </StyledList>
+      )}
     </StyledDrawer>
   );
 }
 
 export default Sidebar;
-
