@@ -7,6 +7,8 @@ import backgroundImage from '../assets/images/image.png'; // فرض بر این 
 import logo from '../assets/images/logo 2.png'; // لوگوی سیستم
 import HttpsIcon from '@mui/icons-material/Https';
 import EmailIcon from '@mui/icons-material/Email';
+import 'react-toastify/dist/ReactToastify.css';
+
 const LoginPageContainer = styled.div`
   display: flex;
   height: 100vh;
@@ -52,7 +54,6 @@ const WelcomeText = styled(Typography)`
   color: #4a4a4a;
   font-weight: 500;
   font-family: 'iran-sans';
-  
 `;
 
 function LoginPage() {
@@ -60,13 +61,24 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !password) {
       toast.error('لطفاً همه فیلدها را پر کنید');
       return;
     }
-    toast.success(`خوش آمدید، ${email}!`, {
+    if (!validateEmail(email)) {
+      toast.error('فرمت ایمیل اشتباه است');
+      return;
+    }
+
+    const username = email.split('@')[0];
+    toast.success(`خوش آمدید، ${username}!`, {
       position: 'top-center',
       autoClose: 5000, // تعیین مدت زمان نمایش پیغام
       hideProgressBar: false,
@@ -87,7 +99,7 @@ function LoginPage() {
           <Typography variant="h5" fontFamily={'iran-sans'} component="h1" textAlign="center">
             ورود به سیستم
           </Typography>
-          <Typography  fontFamily={'iran-sans'} color={'gray'} textAlign={'center'} px={{xs:0,sm:2}} lineHeight={'30px'} py={1} fontSize={'14px'}>
+          <Typography fontFamily={'iran-sans'} color={'gray'} textAlign={'center'} px={{ xs: 0, sm: 2 }} lineHeight={'30px'} py={1} fontSize={'14px'}>
             به شرکت سایان رایان اکباتان خوش آمدید. لطفاً با وارد کردن ایمیل و رمز عبور خود وارد سیستم شوید.
           </Typography>
           <form onSubmit={handleSubmit}>
@@ -101,8 +113,8 @@ function LoginPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                  <EmailIcon />
-                </InputAdornment>
+                    <EmailIcon />
+                  </InputAdornment>
                 ),
               }}
             />
@@ -114,12 +126,11 @@ function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-           
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                  <HttpsIcon />
-                </InputAdornment>
+                    <HttpsIcon />
+                  </InputAdornment>
                 ),
               }}
             />
@@ -128,7 +139,7 @@ function LoginPage() {
               variant="contained"
               color="primary"
               fullWidth
-              sx={{marginTop:'20px'}}
+              sx={{ marginTop: '20px' }}
               disabled={!email || !password} // Disable button if fields are empty
             >
               ورود
@@ -141,3 +152,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
