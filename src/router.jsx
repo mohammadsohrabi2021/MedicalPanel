@@ -14,6 +14,10 @@ const router = createBrowserRouter([
     element: <IdentityLayout />,
     children: [
       {
+        index: true,
+        element: <LoginPage />,
+      },
+      {
         path: "login",
         element: <LoginPage />,
       },
