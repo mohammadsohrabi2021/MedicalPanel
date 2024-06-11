@@ -20,6 +20,10 @@ const Content = styled(Box)`
   background-color: #f4f4f4;
   transition: margin-right 0.3s ease; // انیمیشن برای تغییر موقعیت
   margin-right: ${({ sidebarOpen }) => (sidebarOpen ? '240px' : '0')};
+
+@media (max-width: 767px) {
+  margin-right: ${({ sidebarOpen }) => (sidebarOpen ? '20px' : '0')};
+}
 `;
 const StyledContainer = styled(Container)`
   display: flex;
