@@ -126,7 +126,7 @@ function AddPatientModal({ open, onClose, onAddPatient }) {
             margin="dense"
             id="name"
             name="name"
-            label="نام"
+            placeholder="نام"
             type="text"
             fullWidth
             variant="outlined"
@@ -139,7 +139,7 @@ function AddPatientModal({ open, onClose, onAddPatient }) {
             margin="dense"
             id="age"
             name="age"
-            label="سن"
+            placeholder="سن"
             type="text"
             fullWidth
             variant="outlined"
@@ -152,7 +152,7 @@ function AddPatientModal({ open, onClose, onAddPatient }) {
             margin="dense"
             id="condition"
             name="condition"
-            label="وضعیت پزشکی"
+            placeholder="وضعیت پزشکی"
             type="text"
             fullWidth
             variant="outlined"
