@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
+import { Box, Button, Grid, IconButton, Modal, Typography } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddPatientModal from '../components/AddPatientModal';
-
-
+import imageLogo from '../assets/images/userLogo.png'
+import CloseIcon from '@mui/icons-material/Close';
 const theme = createTheme({
 //   direction: 'rtl',
   typography: {
@@ -180,13 +180,13 @@ function PatientsGrid({ patients,onDeletePatient,onEditPatient }) {
       renderCell: (params) => (
         <>
           <IconButton onClick={(event) => handleViewClick(event, params.row)}>
-            <VisibilityIcon />
+            <VisibilityIcon sx={{color:'green'}}/>
           </IconButton>
           <IconButton onClick={(event) => handleEditClick(event, params.row)}>
-            <EditIcon />
+            <EditIcon  sx={{color:'gray'}}/>
           </IconButton>
           <IconButton onClick={(event) => handleDeleteClick(event, params.row)}>
-            <DeleteIcon />
+            <DeleteIcon sx={{color:'red'}}/>
           </IconButton>
         </>
       ),
@@ -195,7 +195,9 @@ function PatientsGrid({ patients,onDeletePatient,onEditPatient }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ height: 400, width: '100%' }}>
+      {/* <Box sx={{ height: 400, width: '100%' }}> */}
+      <Grid style={{ width: '100%', height: '100%', overflowX: 'auto'  }}>
+    <Grid height={400} width={{ xs: '850px', sm: '100%' }} >
         <DataGrid
           rows={patients}
           columns={columns}
@@ -205,11 +207,17 @@ function PatientsGrid({ patients,onDeletePatient,onEditPatient }) {
           components={{ Toolbar: GridToolbar }}
           localeText={localeText}
         />
-      </Box>
+      {/* </Box> */}
+      </Grid>
+      </Grid>
 
       <Modal open={isViewModalOpen} onClose={closeModal}>
         <Box sx={{ ...modalStyle }}>
-          <Typography variant="h6">اطلاعات بیمار</Typography>
+          <img src={imageLogo} style={{width:'100%',height:'300px'}} alt="" />
+         <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} >
+          <Typography variant="h6" fontFamily={'iran-sans'} textAlign={'center'} my={1} color={'gray'}>اطلاعات بیمار</Typography>
+         <CloseIcon style={{cursor:'pointer'}} onClick={closeModal}/>
+         </Box>
           {selectedPatient && (
             <>
               <Typography>نام: {selectedPatient.name}</Typography>
@@ -220,13 +228,16 @@ function PatientsGrid({ patients,onDeletePatient,onEditPatient }) {
         </Box>
       </Modal>
       <Modal open={isDeleteModalOpen} onClose={closeModal}>
-        <Box sx={{ ...modalStyle }}>
-          <Typography variant="h6">تایید حذف</Typography>
+        <Box sx={{ ...modalStyle }} >
+          <Typography textAlign={'center'} variant="h6">تایید حذف</Typography>
           {selectedPatient && (
             <>
-              <Typography>آیا مطمئن هستید که می‌خواهید بیمار {selectedPatient.name} را حذف کنید؟</Typography>
-              <Button onClick={confirmDelete} color="primary" variant="contained">بله</Button>
+              <Typography my={3} >آیا مطمئن هستید که می‌خواهید بیمار {selectedPatient.name} را حذف کنید؟</Typography>
+              <Box display={'flex'} mt={2} justifyContent={'center'} gap={4}>
               <Button onClick={closeModal} color="secondary" variant="contained">خیر</Button>
+              <Button onClick={confirmDelete} color="error" variant="contained">بله</Button>
+              </Box>
+              
             </>
           )}
         </Box>
@@ -249,10 +260,15 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  maxWidth:'100%',
+  minWidth: 300,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
+  display:'flex',
+  justifyCountent:'center',
+  flexDirection:'column',
+  borderRadius:'10px'
 };
 export default PatientsGrid;
 
