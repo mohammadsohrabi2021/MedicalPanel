@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from '@mui/material';
 import { styled } from '@mui/system';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -59,8 +59,8 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 
 const CustomButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(0.5),
-  width:'150px',
-  height:'40px',
+  width: '150px',
+  height: '40px',
   borderRadius: '10px',
   textTransform: 'none',
   fontWeight: 'bold',
@@ -81,9 +81,17 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function AddPatientModal({ open, onClose, onAddPatient }) {
+function AddPatientModal({ open, onClose, onAddPatient, initialData }) {
   const [patient, setPatient] = useState({ name: '', age: '', condition: '' });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (initialData) {
+      setPatient(initialData);
+    } else {
+      setPatient({ name: '', age: '', condition: '' });
+    }
+  }, [initialData, open]);
 
   const validate = () => {
     let tempErrors = {};
@@ -97,7 +105,7 @@ function AddPatientModal({ open, onClose, onAddPatient }) {
   const handleAdd = () => {
     if (validate()) {
       onAddPatient(patient);
-      toast.success('بیمار با موفقیت افزوده شد!');
+      // toast.success(initialData ? 'بیمار با موفقیت ویرایش شد!' : 'بیمار با موفقیت افزوده شد!');
       setPatient({ name: '', age: '', condition: '' }); // Reset the form
       onClose(); // Close the modal after adding
     }
@@ -115,10 +123,9 @@ function AddPatientModal({ open, onClose, onAddPatient }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContainer />
       <CustomDialog open={open} onClose={onClose} fullWidth maxWidth="sm">
         <DialogTitle style={{ textAlign: 'center', fontWeight: 'bold', color: '#1976d2' }}>
-          افزودن بیمار جدید
+          {initialData ? 'ویرایش بیمار' : 'افزودن بیمار جدید'}
         </DialogTitle>
         <DialogContent>
           <CustomTextField
@@ -167,7 +174,7 @@ function AddPatientModal({ open, onClose, onAddPatient }) {
             لغو
           </CustomButton>
           <CustomButton onClick={handleAdd} color="primary" variant="contained">
-            افزودن
+            {initialData ? 'ویرایش' : 'افزودن'}
           </CustomButton>
         </DialogActions>
       </CustomDialog>
