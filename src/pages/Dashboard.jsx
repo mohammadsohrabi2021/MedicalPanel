@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Button } from '@mui/material';
-import Sidebar from '../components/Sidebar';
-import TopBar from '../components/TopBar';
-import Footer from '../components/Footer';
+import { ToastContainer, toast } from 'react-toastify';
 import PatientsGrid from '../components/PatientsGrid';
 import AddPatientModal from '../components/AddPatientModal';
 import styled from 'styled-components';
@@ -30,34 +28,44 @@ const StyledContainer = styled(Container)`
 function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
   const [patients, setPatients] = useState([]);
 
   const addPatient = (newPatient) => {
-    setPatients([...patients, { ...newPatient, id: patients.length + 1 }]);
+    if (selectedPatient) {
+      setPatients(patients.map(patient => patient.id === selectedPatient.id ? { ...newPatient, id: selectedPatient.id } : patient));
+      toast.success(`بیمار ${newPatient.name} با موفقیت ویرایش شد!`);
+    } else {
+      setPatients([...patients, { ...newPatient, id: patients.length + 1 }]);
+      toast.success(`بیمار ${newPatient.name} با موفقیت اضافه شد!`);
+    }
+    setSelectedPatient(null);
   };
 
+  const deletePatient = (id) => {
+    const patientToDelete = patients.find(patient => patient.id === id);
+    setPatients(patients.filter(patient => patient.id !== id));
+    toast.success(`بیمار ${patientToDelete.name} با موفقیت حذف شد!`);
+  };
+
+  const editPatient = (patient) => {
+    setSelectedPatient(patient);
+    setIsModalOpen(true);
+  };
   useEffect(() => {
     if (window.innerWidth >= 768) {
       setIsSidebarOpen(true); // باز کردن سایدبار در دسکتاپ به‌صورت پیش‌فرض
     }
   }, []);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
+  console.log(selectedPatient)
   return (
     <>
-      {/* <TopBar onMenuClick={toggleSidebar} /> */}
-      {/* <StyledContainer maxWidth="false" sidebarOpen={isSidebarOpen}> */}
-        {/* <Sidebar open={isSidebarOpen} onClose={toggleSidebar} /> */}
-        {/* <Content sidebarOpen={isSidebarOpen}> */}
+     {/* <ToastContainer/> */}
           <Button sx={{marginBottom:'30px'}} variant='contained' onClick={() => setIsModalOpen(true)} ><AddIcon/> افزودن بیمار جدید </Button>
-          <PatientsGrid patients={patients} />
-          {/* <Footer /> */}
-        {/* </Content> */}
-      {/* </StyledContainer> */}
-      <AddPatientModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddPatient={addPatient} />
+          <PatientsGrid patients={patients} onDeletePatient={deletePatient} onEditPatient={editPatient} />
+
+ 
+      <AddPatientModal open={isModalOpen} onClose={() => setIsModalOpen(false)}initialData={selectedPatient} onAddPatient={addPatient} />
     </>
   );
 }
